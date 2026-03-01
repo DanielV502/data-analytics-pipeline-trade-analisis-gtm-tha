@@ -1,0 +1,39 @@
+# Mac
+.DS_Store
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Environment variables
+.env
+
+# Virtual environments
+.venv
+venv/
+
+# Build
+*.egg-info/
+dist/
+build/
+
+# IDE
+*.code-workspace
+
+# AI tooling
+.claude/
+
+# Data
+data/external/
+data/interim/
+data/output/
+data/processed/
+data/raw/
+
+# Optional (exclude all data)
+# data/

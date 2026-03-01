@@ -1,0 +1,31 @@
+[project]
+name = "lab-01-data-analytics-pipeline"
+version = "0.1.0"
+description = "Data analytics pipeline analyzing trade exports between Guatemala and Thailand using WITS HS2 and HS6 data."
+requires-python = ">=3.12"
+license = "MIT"
+authors = [
+    { name = "Daniel Val" }
+]
+readme = "README.md"
+
+dependencies = [
+    "ipykernel>=7.1.0",
+    "matplotlib>=3.10.8",
+    "numpy>=2.4.1",
+    "openpyxl>=3.1.5",
+    "pandas>=3.0.0",
+    "pyarrow>=22.0.0",
+    "python-dotenv>=1.2.1",
+    "seaborn>=0.13.2",
+]
+
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]

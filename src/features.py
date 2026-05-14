@@ -4,6 +4,8 @@
 
 import pandas as pd
 
+from config import HS_CODE_LENGTHS, MACRO_REGION_MAP, NUMERIC_COLUMNS
+
 
 def normalize_columns(df: pd.DataFrame) -> pd.DataFrame:
     """Normalize DataFrame column names to snake_case and remove special characters.
@@ -56,20 +58,11 @@ def cast_dtypes(df: pd.DataFrame) -> pd.DataFrame:
     df["trade_direction"] = df["trade_direction"].astype("category")
 
     # Normalize HS codes to standard lengths
-    df.loc[df["hs_code"] == "HS2", "productcode"] = df.loc[
-        df["hs_code"] == "HS2", "productcode"
-    ].str.zfill(2)
-    df.loc[df["hs_code"] == "HS6", "productcode"] = df.loc[
-        df["hs_code"] == "HS6", "productcode"
-    ].str.zfill(6)
+    for hs_label, length in HS_CODE_LENGTHS.items():
+        mask = df["hs_code"] == hs_label
+        df.loc[mask, "productcode"] = df.loc[mask, "productcode"].str.zfill(length)
 
-    numeric_cols = [
-        "tradevalue_in_1000_usd",
-        "netweight_in_kgm",
-        "quantity",
-    ]
-
-    for col in numeric_cols:
+    for col in NUMERIC_COLUMNS:
         if col in df.columns:
             df[col] = pd.to_numeric(df[col], errors="coerce")
 
@@ -115,17 +108,9 @@ def add_partner_macro_region(df: pd.DataFrame) -> pd.DataFrame:
     """
     df = df.copy()
 
-    macro_map = {
-        "East Asia & Pacific": "APAC",
-        "South Asia": "APAC",
-        "Latin America & Caribbean": "GRULAC",
-        "Europe & Central Asia": "EMEA",
-        "Middle East, North Africa, Afghanistan & Pakistan": "EMEA",
-        "Sub-Saharan Africa": "EMEA",
-        "North America": "NORTH_AMERICA",
-    }
-
-    df["partner_macro_region"] = df["partner_region"].map(macro_map).fillna("OTHERS")
+    df["partner_macro_region"] = (
+        df["partner_region"].map(MACRO_REGION_MAP).fillna("OTHERS")
+    )
 
     df["partner_macro_region"] = df["partner_macro_region"].astype("category")
     return df

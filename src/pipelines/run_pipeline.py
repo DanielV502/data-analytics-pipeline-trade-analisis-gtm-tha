@@ -5,6 +5,7 @@ try:
 except ImportError:
     display = print
 
+from config import PROCESSED_DATASET_BASENAME
 from dataset import load_all_trade_data
 from features import (
     normalize_columns,
@@ -41,7 +42,7 @@ def run():
     validate_business_rules(df)
 
     # Persistence
-    save_processed_dataset(df, "trade_gtm_tha_2017_2025_processed")
+    save_processed_dataset(df, PROCESSED_DATASET_BASENAME)
 
     return df
 

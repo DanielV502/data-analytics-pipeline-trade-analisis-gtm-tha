@@ -3,6 +3,8 @@
 import pandas as pd
 import warnings
 
+from config import ALLOWED_TRADE_DIRECTIONS, HS_CODE_LENGTHS, REQUIRED_COLUMNS
+
 
 def validate_schema(df: pd.DataFrame) -> None:
     """Validate that all required columns are present in the DataFrame.
@@ -13,17 +15,7 @@ def validate_schema(df: pd.DataFrame) -> None:
     Raises:
         ValueError: If any required column is missing.
     """
-    required_columns = {
-        "year",
-        "productcode",
-        "productdescription",
-        "trade_value_usd",
-        "trade_direction",
-        "reportername",
-        "partnername",
-    }
-
-    missing = required_columns - set(df.columns)
+    missing = REQUIRED_COLUMNS - set(df.columns)
 
     if missing:
         raise ValueError(f"Missing required columns: {missing}")
@@ -81,7 +73,8 @@ def validate_business_rules(df: pd.DataFrame) -> None:
     """
 
     # Step 4a: Validate HS product code length (HS2 = 2 digits, HS6 = 6 digits)
-    invalid_hs = df["productcode"].str.len().ne(2) & df["productcode"].str.len().ne(6)
+    lengths = df["productcode"].str.len()
+    invalid_hs = ~lengths.isin(HS_CODE_LENGTHS.values())
 
     if invalid_hs.any():
         warnings.warn(
@@ -90,14 +83,7 @@ def validate_business_rules(df: pd.DataFrame) -> None:
         )
 
     # Step 4b: Validate trade direction values
-    allowed_directions = {
-        "GRULAC_to_APAC",
-        "THA_to_GRULAC",
-        "GTM_to_APAC",
-        "GTM_to_WORLD",
-    }
-
-    invalid_directions = set(df["trade_direction"].unique()) - allowed_directions
+    invalid_directions = set(df["trade_direction"].unique()) - ALLOWED_TRADE_DIRECTIONS
 
     if invalid_directions:
         warnings.warn(

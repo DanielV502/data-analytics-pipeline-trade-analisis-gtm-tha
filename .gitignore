@@ -16,6 +16,7 @@ __pycache__/
 # Virtual environments
 .venv
 venv/
+.conda/
 
 # Build
 *.egg-info/
@@ -24,6 +25,8 @@ build/
 
 # IDE
 *.code-workspace
+.vscode/
+.idea/
 
 # AI tooling
 .claude/

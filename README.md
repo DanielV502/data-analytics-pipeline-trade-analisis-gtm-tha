@@ -27,13 +27,12 @@ lab-01-data-analytics-pipeline/
 ├── reports/
 │   └── figures/                # Generated charts and visualizations
 ├── src/
-│   ├── config.py               # Project paths and configuration
-│   ├── dataset.py              # Data loading functions
+│   ├── config.py               # Paths and shared business constants
+│   ├── dataset.py              # Raw CSV loading and concatenation
 │   ├── features.py             # Feature engineering and transformations
-│   ├── validation.py           # Schema and business rule validation
-│   ├── plots.py                # Plotting utilities
+│   ├── validation.py           # Schema, type, value, and business rule checks
 │   ├── services/
-│   │   └── io.py               # I/O service (save/export)
+│   │   └── io.py               # Processed dataset persistence (parquet + csv)
 │   └── pipelines/
 │       └── run_pipeline.py     # Pipeline entry point
 ├── pyproject.toml              # Project metadata and dependencies
@@ -71,10 +70,9 @@ pip install -e .
 
 ### Running the Pipeline
 
-The data pipeline loads raw trade data, applies transformations and validations, and saves the processed dataset:
+The data pipeline loads raw trade data, applies transformations and validations, and saves the processed dataset under `data/processed/` (both `.parquet` and `.csv` by default). Run from the project root with the env active:
 
 ```bash
-cd src
 python -m pipelines.run_pipeline
 ```
 
@@ -92,8 +90,8 @@ Open Jupyter and run the notebooks in order:
 
 ## Tech Stack
 
-- **Python 3.12** — pandas, matplotlib, seaborn, numpy
-- **Data formats** — Parquet (processed), Excel (raw)
+- **Python 3.12** — pandas, matplotlib, seaborn, numpy, pyarrow
+- **Data formats** — CSV (raw, from WITS exports), Parquet + CSV (processed)
 - **Pipeline** — Custom Python modules under `src/`
 
 ## License

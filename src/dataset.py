@@ -5,16 +5,6 @@ from glob import glob
 from pathlib import Path
 from config import DATA_RAW_DIR
 
-### Debug code
-# from config import ROOT_DIR
-# print("CWD:", Path.cwd())
-# print(
-#     "DATA PATH EXISTS:",
-#     DATA_RAW_DIR.resolve(),
-#     "->",
-#     DATA_RAW_DIR.exists(),
-# )
-
 
 def load_all_trade_data() -> pd.DataFrame:
     """Load and concatenate all raw trade CSV files from the data/raw/ directory.
@@ -61,7 +51,3 @@ def load_all_trade_data() -> pd.DataFrame:
     print(f"\n\t✅ Data Files list: {len(files_list)} | Files imported: {len(dfs)}\n")
 
     return pd.concat(dfs, ignore_index=True)
-
-
-### Debug code
-# print("'dataset.py' loaded")

@@ -97,7 +97,3 @@ def validate_business_rules(df: pd.DataFrame) -> None:
             f"Unexpected trade_direction values detected: {invalid_directions}",
             UserWarning,
         )
-
-
-### Debug code
-# print("'validation.py' loaded")

@@ -1,4 +1,11 @@
-"""Feature engineering and transformation functions for the trade pipeline."""
+"""Feature engineering and transformation functions for the trade pipeline.
+
+Note:
+    Transformation functions in this module mutate the input DataFrame in
+    place and return it for chaining (the pipeline reassigns each result,
+    so in-place mutation is intentional and avoids unnecessary copies).
+    Callers that need to preserve the original should pass df.copy().
+"""
 
 # Step 1: Column normalization
 
@@ -14,11 +21,9 @@ def normalize_columns(df: pd.DataFrame) -> pd.DataFrame:
         df (pd.DataFrame): Input DataFrame with arbitrary column names.
 
     Returns:
-        pd.DataFrame: Copy of the DataFrame with lowercased, underscore-delimited
-            column names free of non-alphanumeric characters.
+        pd.DataFrame: The same DataFrame with lowercased, underscore-delimited
+            column names free of non-alphanumeric characters (in-place).
     """
-    df = df.copy()
-
     df.columns = (
         df.columns.str.strip()
         .str.lower()
@@ -43,14 +48,13 @@ def cast_dtypes(df: pd.DataFrame) -> pd.DataFrame:
         df (pd.DataFrame): Input DataFrame after column normalization.
 
     Returns:
-        pd.DataFrame: Copy with corrected dtypes and normalized product codes.
+        pd.DataFrame: The same DataFrame with corrected dtypes and normalized
+            product codes (in-place).
     """
-    df = df.copy()
-
     df["year"] = df["year"].astype(int)
 
     df["productcode"] = (
-        df["productcode"].astype(str).str.replace(r"\.0$", "", regex=True).str.strip()
+        df["productcode"].astype(str).str.removesuffix(".0").str.strip()
     )
 
     df["hs_code"] = df["hs_code"].astype("category")
@@ -83,9 +87,9 @@ def add_trade_value_usd(df: pd.DataFrame) -> pd.DataFrame:
             or contains any NaN values.
 
     Returns:
-        pd.DataFrame: Copy with an added 'trade_value_usd' column (float).
+        pd.DataFrame: The same DataFrame with an added 'trade_value_usd'
+            column (float, in-place).
     """
-    df = df.copy()
     if "tradevalue_in_1000_usd" not in df.columns:
         raise ValueError(
             "Required column 'tradevalue_in_1000_usd' not found. "
@@ -109,18 +113,12 @@ def add_partner_macro_region(df: pd.DataFrame) -> pd.DataFrame:
             region strings.
 
     Returns:
-        pd.DataFrame: Copy with an added 'partner_macro_region' category column.
-            Unmapped regions are assigned 'OTHERS'.
+        pd.DataFrame: The same DataFrame with an added 'partner_macro_region'
+            category column (in-place). Unmapped regions are assigned 'OTHERS'.
     """
-    df = df.copy()
-
     df["partner_macro_region"] = (
         df["partner_region"].map(MACRO_REGION_MAP).fillna("OTHERS")
     )
 
     df["partner_macro_region"] = df["partner_macro_region"].astype("category")
     return df
-
-
-### Debug code
-# print("'features.py' loaded")

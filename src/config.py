@@ -52,6 +52,3 @@ MACRO_REGION_MAP = {
 
 # Output filename for the persisted processed dataset (no extension)
 PROCESSED_DATASET_BASENAME = "trade_gtm_tha_2017_2025_processed"
-
-### Debug code
-# print("'config.py' loaded")

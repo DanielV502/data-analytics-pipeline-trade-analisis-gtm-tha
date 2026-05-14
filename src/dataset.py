@@ -38,9 +38,17 @@ def load_all_trade_data() -> pd.DataFrame:
         fname = Path(f).name
         parts = fname.split("_")
 
+        if len(parts) < 10:
+            raise ValueError(
+                f"Unexpected filename format (expected >=10 underscore-separated "
+                f"segments, got {len(parts)}): {fname!r}"
+            )
+
         file_number = parts[0]
+        src_region = parts[5].upper()
+        dst_region = parts[7].upper()
+        trade_direction = f"{src_region}_to_{dst_region}"
         hs_code = parts[9].split(".")[0].upper()
-        trade_direction = "_".join(parts[5:8]).upper().replace("_TO_", "_to_")
 
         df = pd.read_csv(f, encoding="latin1", low_memory=False)
 

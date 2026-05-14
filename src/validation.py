@@ -1,4 +1,11 @@
-"""Schema, type, value, and business rule validation for the trade pipeline."""
+"""Schema, type, value, and business rule validation for the trade pipeline.
+
+Convention:
+    - validate_schema, validate_dtypes, validate_values raise on failure
+      (fatal: missing columns, wrong dtypes, negative trade values, etc.).
+    - validate_business_rules emits warnings only (advisory: HS code length,
+      unexpected trade direction labels). Pipeline continues regardless.
+"""
 
 import pandas as pd
 import warnings

@@ -13,8 +13,8 @@ def save_processed_dataset(df: pd.DataFrame, base_name: str) -> None:
             Output files will be saved as <base_name>.parquet and <base_name>.csv under
             data/processed/.
     """
-    parquet_path = f"{DATA_PROCESSED_DIR}/{base_name}.parquet"
-    csv_path = f"{DATA_PROCESSED_DIR}/{base_name}.csv"
+    parquet_path = DATA_PROCESSED_DIR / f"{base_name}.parquet"
+    csv_path = DATA_PROCESSED_DIR / f"{base_name}.csv"
 
     df.to_parquet(parquet_path, index=False, engine="pyarrow", compression="snappy")
     df.to_csv(csv_path, index=False)

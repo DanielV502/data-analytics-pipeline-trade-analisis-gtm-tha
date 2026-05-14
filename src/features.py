@@ -79,12 +79,18 @@ def add_trade_value_usd(df: pd.DataFrame) -> pd.DataFrame:
         df (pd.DataFrame): DataFrame containing a 'tradevalue_in_1000_usd' column with no NaNs.
 
     Raises:
-        ValueError: If 'tradevalue_in_1000_usd' contains any NaN values.
+        ValueError: If 'tradevalue_in_1000_usd' is missing from the DataFrame
+            or contains any NaN values.
 
     Returns:
         pd.DataFrame: Copy with an added 'trade_value_usd' column (float).
     """
     df = df.copy()
+    if "tradevalue_in_1000_usd" not in df.columns:
+        raise ValueError(
+            "Required column 'tradevalue_in_1000_usd' not found. "
+            "Cannot compute trade_value_usd."
+        )
     if df["tradevalue_in_1000_usd"].isna().any():
         raise ValueError(
             "tradevalue_in_1000_usd contains NaN values. "
